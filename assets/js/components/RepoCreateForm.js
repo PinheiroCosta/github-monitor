@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Field, reduxForm} from 'redux-form';
+import validate from './validations';
 
 const renderField = ({
   input, placeholder, className, type, meta: {touched, error, invalid},
@@ -32,7 +33,7 @@ renderField.propTypes = {
 
 const RepoCreateForm = (props) => {
   const {
-    successMessage, handleSubmit, pristine, submitting,
+    successMessage, errorMessage, handleSubmit, pristine, submitting,
   } = props;
   return (
     <div>
@@ -42,6 +43,12 @@ const RepoCreateForm = (props) => {
             Repository added successfully!
           </div>
         )}
+      {errorMessage 
+        && (
+        <div className="alert alert-danger" role="alert">
+          Failed to add repository!
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="col-10">
@@ -69,15 +76,7 @@ RepoCreateForm.propTypes = {
   pristine: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   successMessage: PropTypes.bool.isRequired,
-};
-
-const validate = (values) => {
-  const {username} = document.getElementById('main').dataset;
-  const errors = {};
-  if (!values.name || !values.name.startsWith(`${username}/`)) {
-    errors.name = `Repository must belong to you (eg: ${username}/repo-name)`;
-  }
-  return errors;
+  errorMessage: PropTypes.bool.isRequired,
 };
 
 export default reduxForm({
