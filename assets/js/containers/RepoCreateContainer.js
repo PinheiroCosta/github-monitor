@@ -30,8 +30,8 @@ RepoCreateContainer.propTypes = {
 };
 
 const mapStateToProps = store => ({
-  successMessage: store.commitState.successMessage,
-  errorMessage: store.commitState.errorMessage,
+  successMessage: store.repositoryState.successMessage,
+  errorMessage: store.repositoryState.errorMessage,
 });
 
 export default connect(mapStateToProps)(RepoCreateContainer);
