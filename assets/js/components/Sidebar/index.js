@@ -13,7 +13,7 @@ const Sidebar = ({ repositories }) => {
           <Link to="/">Github Monitor</Link>
         </li>
         {repositories.map((repository) => (
-          <li key={repository.id}>
+          <li key={repository.id} className="text-center">
             <Link to={`/repositories/${repository.id}`}>{repository.name}</Link>
           </li>
         ))}
