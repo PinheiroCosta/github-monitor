@@ -20,7 +20,6 @@ class SidebarContainer extends React.Component {
       .get('/api/repositories/')
       .then(response => {
         const repositories = response.data;
-        console.log(repositories);
         this.setState({repositories, loading: false});
       }).catch(error => console.error(error));
   }

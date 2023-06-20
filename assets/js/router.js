@@ -9,23 +9,15 @@ import SidebarContainer from './containers/SidebarContainer';
 export default (
     <Router>
         <div id="wrapper" className="toggled">
-            <div id="sidebar-wrapper">
-                <ul className="sidebar-nav">
-                    <li className="sidebar-brand">
-                        <Link to="/">
-                            Github Monitor
-                        </Link>
-                    </li>
-                </ul>
-            </div>
 
             <SidebarContainer />
-
             <div id="page-content-wrapper">
                 <div className="container-fluid">
                     <RepoCreateContainer />
                     <Switch>
-                        <Route path="/" exact component={CommitListContainer} />
+                        <Route path="/" exact> 
+                            <CommitListContainer />
+                        </Route>
                     </Switch>
                 </div>
             </div>
