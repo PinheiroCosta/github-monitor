@@ -9,7 +9,8 @@ import {
 import {
   getRepositorySuccess, 
   createRepositoryFailure, 
-  createRepositorySuccess
+  createRepositorySuccess,
+  renderRepositoryMessage,
 } from '../actions/RepositoryActions';
 
 class RepoCreateContainer extends React.Component {
@@ -19,23 +20,25 @@ class RepoCreateContainer extends React.Component {
     const v = {...values, name};
 
     const {repositories} = this.props;
-    const repositoryExists = repositories.some(object => object.name === name);
-    if (!repositoryExists) {
-      return createRepository(v, {'X-CSRFToken': token}, dispatch)
-        .then(getRepository(name));
-    }
-
-    dispatch(createRepositoryFailure(null, true));
-    dispatch(createRepositorySuccess(null, false));
+    const repositoryAlreadyAdded = repositories.map(object => object.name).includes(name);
+    if (repositoryAlreadyAdded) {
+      dispatch(renderRepositoryMessage("Repository already added"));
+      dispatch(createRepositoryFailure(null, true));
+      dispatch(createRepositorySuccess(null, false));
+      return;
+    } 
+    return createRepository(v, {'X-CSRFToken': token}, dispatch)
+      .then(getRepository(name));
   };
 
   render() {
-    const {successMessage, errorMessage} = this.props;
+    const {successMessage, errorMessage, renderMessage} = this.props;
     return (
       <Form 
         onSubmit={this.submit} 
         successMessage={successMessage}
         errorMessage={errorMessage}
+        renderMessage={renderMessage}
       />
     );
   }
@@ -45,12 +48,14 @@ RepoCreateContainer.propTypes = {
   successMessage: PropTypes.bool.isRequired,
   errorMessage: PropTypes.bool.isRequired,
   repositories: PropTypes.arrayOf(PropTypes.object).isRequired,
+  renderMessage: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
   successMessage: state.repositoryState.successMessage,
   errorMessage: state.repositoryState.errorMessage,
   repositories: state.repositoryState.repositories,
+  renderMessage: state.repositoryState.renderMessage,
 });
 
 export default connect(mapStateToProps)(RepoCreateContainer);
