@@ -13,11 +13,6 @@ const repositoryReducer = (state = initialState, action) => {
         ...state,
         repositories: Object.values(action.payload),
       };
-    case types.GET_REPOSITORIES_SUCCESS:
-      return {
-        ...state,
-        repositories: Object.values(action.payload),
-      };
     case types.CREATE_REPOSITORY_SUCCESS: 
       return {
         ...state, 
