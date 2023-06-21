@@ -4,6 +4,7 @@ const initialState = {
   repositories: [],
   successMessage: false,
   errorMessage: false,
+  renderMessage: "",
 };
 
 const repositoryReducer = (state = initialState, action) => {
@@ -16,12 +17,17 @@ const repositoryReducer = (state = initialState, action) => {
     case types.CREATE_REPOSITORY_SUCCESS: 
       return {
         ...state, 
-        successMessage: action.payload.successMessage
+        successMessage: action.payload.successMessage,
       };
     case types.CREATE_REPOSITORY_FAILURE:
       return {
         ...state,
-        errorMessage: action.payload.errorMessage
+        errorMessage: action.payload.errorMessage,
+      };
+    case types.RENDER_REPOSITORY_MESSAGE:
+      return {
+        ...state,
+        renderMessage: action.payload,
       };
     default:
       return state;

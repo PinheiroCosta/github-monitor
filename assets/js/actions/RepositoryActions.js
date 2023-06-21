@@ -14,3 +14,8 @@ export const getRepositorySuccess = repositories => ({
   type: types.GET_REPOSITORY_SUCCESS,
   payload: repositories,
 });
+
+export const renderRepositoryMessage = renderMessage => ({
+  type: types.RENDER_REPOSITORY_MESSAGE,
+  payload: renderMessage,
+});
