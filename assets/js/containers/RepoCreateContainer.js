@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import * as commitAPI from '../api/CommitAPI';
+import {createRepository, getRepository} from '../api/CommitAPI';
 import Form from '../components/RepoCreateForm';
 
 class RepoCreateContainer extends React.Component {
@@ -9,7 +9,8 @@ class RepoCreateContainer extends React.Component {
     const token = document.getElementById('main').dataset.csrftoken;
     const name = values.name.split('/')[1];
     const v = {...values, name};
-    return commitAPI.createRepository(v, {'X-CSRFToken': token}, dispatch);
+    return createRepository(v, {'X-CSRFToken': token}, dispatch)
+      .then(getRepository());
   };
 
   render() {

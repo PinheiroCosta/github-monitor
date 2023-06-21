@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Sidebar = ({ repositories }) => {
+const Sidebar = (props) => {
+  const {repositories} = props;
   if (!repositories) {
     return null;
   }

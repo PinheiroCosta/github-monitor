@@ -1,38 +1,21 @@
 import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Sidebar from '../components/Sidebar';
-import {getRepositoriesSuccess} from '../actions/RepositoryActions'
+import {connect} from 'react-redux';
+import {getRepository} from '../api/CommitAPI';
+import {getRepositorySuccess} from '../actions/RepositoryActions'
 
 class SidebarContainer extends React.Component {
-  state = {
-    repositories: [],
-    loading: true,
-  };
-
   componentDidMount() {
-    this.fetchRepositories(); 
-  }
-
-  fetchRepositories = () => {
-    axios
-      .get('/api/repositories/')
-      .then(response => {
-        const repositories = response.data;
-        this.setState({repositories, loading: false});
-      }).catch(error => console.error(error));
+    getRepository(); 
   }
 
   render() {
-    const {repositories, loading} = this.state;
-
+    const {repositories} = this.props;
     return (
       <div>
-        {loading 
-          ? (<p>Loading...</p>) 
-          : (<Sidebar repositories={repositories} />)
-        }
+        <Sidebar repositories={repositories} />
       </div>
     );
   }
