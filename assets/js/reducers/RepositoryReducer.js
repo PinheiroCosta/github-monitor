@@ -18,11 +18,13 @@ const repositoryReducer = (state = initialState, action) => {
       return {
         ...state, 
         successMessage: action.payload.successMessage,
+        errorMessage: false
       };
     case types.CREATE_REPOSITORY_FAILURE:
       return {
         ...state,
         errorMessage: action.payload.errorMessage,
+        successMessage: false
       };
     case types.RENDER_REPOSITORY_MESSAGE:
       return {
