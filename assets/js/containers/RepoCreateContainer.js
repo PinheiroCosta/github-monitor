@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../components/RepoCreateForm';
 import {connect} from 'react-redux';
+import {reset, stopSubmit} from 'redux-form';
 import {
   createRepository, 
   getRepository
@@ -22,11 +23,18 @@ class RepoCreateContainer extends React.Component {
     const {repositories} = this.props;
     const repositoryAlreadyAdded = repositories.map(object => object.name).includes(name);
     if (repositoryAlreadyAdded) {
-      dispatch(renderRepositoryMessage("Repository already added"));
+      dispatch(renderRepositoryMessage(`Repository '${name}' already added`));
       dispatch(createRepositoryFailure(null, true));
-      dispatch(createRepositorySuccess(null, false));
       return;
     } 
+
+    const repoDoesntExists = 0; //TODO
+    if (repoDoesntExists){
+      dispatch(renderRepositoryMessage(`Repository '${name}' doesn't exists in your github account`));
+      dispatch(createRepositoryFailure(null, true));
+      return
+    }
+
     return createRepository(v, {'X-CSRFToken': token}, dispatch)
       .then(getRepository(name));
   };

@@ -50,6 +50,7 @@ export const getRepository = (values) => {
     .get(endpoint)
     .then((response) => {
       store.dispatch(getRepositorySuccess({...response.data}));
+      store.dispatch(reset('repoCreate'));
     }).catch((error) => {
       console.error(error);
       throw error;
