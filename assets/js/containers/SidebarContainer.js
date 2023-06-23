@@ -1,10 +1,9 @@
 import React from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import Sidebar from '../components/Sidebar';
 import {connect} from 'react-redux';
 import {getRepository} from '../api/CommitAPI';
 import {getRepositorySuccess} from '../actions/RepositoryActions'
+import Sidebar from '../components/Sidebar';
 
 class SidebarContainer extends React.Component {
   componentDidMount() {
@@ -22,14 +21,11 @@ class SidebarContainer extends React.Component {
 }
 
 SidebarContainer.propTypes = {
-  repositories: PropTypes.arrayOf(PropTypes.object),
+  repositories: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-const mapStateToProps = store => {
-  const {repositories} = store.repositoryState;
-  return {
-    repositories: repositories,
-  };
-};
+const mapStateToProps = store => ({
+    repositories: store.repositoryState.repositories,
+});
 
 export default connect(mapStateToProps)(SidebarContainer);
