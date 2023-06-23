@@ -4,13 +4,13 @@ import {
 } from 'react-router-dom';
 import CommitListContainer from './containers/CommitListContainer';
 import RepoCreateContainer from './containers/RepoCreateContainer';
-import SidebarContainer from './containers/SidebarContainer';
+import RepoListContainer from './containers/RepoListContainer';
 
 export default (
     <Router>
         <div id="wrapper" className="toggled">
 
-            <SidebarContainer />
+            <RepoListContainer />
             <div id="page-content-wrapper">
                 <div className="container-fluid">
                     <RepoCreateContainer />

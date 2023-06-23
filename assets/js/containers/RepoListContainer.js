@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {getRepository} from '../api/CommitAPI';
 import {getRepositorySuccess} from '../actions/RepositoryActions'
-import Sidebar from '../components/Sidebar';
+import RepoList from '../components/RepoList';
 
-class SidebarContainer extends React.Component {
+class RepoListContainer extends React.Component {
   componentDidMount() {
     getRepository(); 
   }
@@ -14,13 +14,13 @@ class SidebarContainer extends React.Component {
     const {repositories} = this.props;
     return (
       <div>
-        <Sidebar repositories={repositories} />
+        <RepoList repositories={repositories} />
       </div>
     );
   }
 }
 
-SidebarContainer.propTypes = {
+RepoListContainer.propTypes = {
   repositories: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
@@ -28,4 +28,4 @@ const mapStateToProps = store => ({
     repositories: store.repositoryState.repositories,
 });
 
-export default connect(mapStateToProps)(SidebarContainer);
+export default connect(mapStateToProps)(RepoListContainer);

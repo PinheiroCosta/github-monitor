@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Sidebar = (props) => {
+const RepoList = (props) => {
   const {repositories} = props;
   if (!repositories) {
     return null;
@@ -23,8 +23,8 @@ const Sidebar = (props) => {
   );
 };
 
-Sidebar.propTypes = {
+RepoList.propTypes = {
   repositories: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default Sidebar;
+export default RepoList;
