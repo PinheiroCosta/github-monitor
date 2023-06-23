@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import Form from '../components/RepoCreateForm';
 import {connect} from 'react-redux';
 import {reset, stopSubmit} from 'redux-form';
+import {getGithubCommits} from '../api/GithubAPI';
 import {
   createRepository, 
-  getRepository
+  getRepository,
 } from '../api/CommitAPI';
 import {
   getRepositorySuccess, 
@@ -16,27 +17,23 @@ import {
 
 class RepoCreateContainer extends React.Component {
   submit = (values, dispatch) => {
-    const token = document.getElementById('main').dataset.csrftoken;
-    const name = values.name.split('/')[1];
-    const v = {...values, name};
-
     const {repositories} = this.props;
-    const repositoryAlreadyAdded = repositories.map(object => object.name).includes(name);
-    if (repositoryAlreadyAdded) {
+    const token = document.getElementById('main').dataset.csrftoken;
+    const [user, name] = values.name.split('/');
+    const v = {...values, name, user};
+    console.log(v);
+
+    const repositoryAdded = repositories.map(object => object.name).includes(name);
+    if (repositoryAdded) {
       dispatch(renderRepositoryMessage(`Repository '${name}' already added`));
-      dispatch(createRepositoryFailure(null, true));
+      dispatch(createRepositoryFailure(true));
       return;
     } 
-
-    const repoDoesntExists = 0; //TODO
-    if (repoDoesntExists){
-      dispatch(renderRepositoryMessage(`Repository '${name}' doesn't exists in your github account`));
-      dispatch(createRepositoryFailure(null, true));
-      return
-    }
-
     return createRepository(v, {'X-CSRFToken': token}, dispatch)
-      .then(getRepository(name));
+      .then(getRepository(dispatch))
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   render() {
