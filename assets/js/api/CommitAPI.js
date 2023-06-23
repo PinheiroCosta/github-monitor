@@ -3,7 +3,6 @@ import {reset, stopSubmit} from 'redux-form';
 import store from '../store';
 import {
   getCommitsSuccess, 
-  createCommitsSuccess,
 } from '../actions/CommitActions';
 import {
   createRepositorySuccess, 
@@ -23,10 +22,8 @@ export const createCommits = (values, headers, formDispatch) =>
   axios
     .post('/api/commits/create/', values, {headers})
     .then((response) => {
-      store.dispatch(createCommitsSuccess(response.data, true));
     }).catch((error) => {
-      const err = error.response;
-      console.error(err);
+      console.error(error);
     });
 
 export const createRepository = (values, headers, formDispatch) => 
@@ -34,25 +31,22 @@ export const createRepository = (values, headers, formDispatch) =>
     .post('/api/repositories/create/', values, {headers})
     .then((response) => {
       store.dispatch(renderRepositoryMessage(`Repository '${values.name}' added successfully!`));
-      store.dispatch(createRepositorySuccess(response.data, true));
+      store.dispatch(createRepositorySuccess(true));
       formDispatch(reset('repoCreate'));
     }).catch((error) => {
       store.dispatch(renderRepositoryMessage(`Error: [${error.message}]`));
-      store.dispatch(createRepositoryFailure(null, true));
+      store.dispatch(createRepositoryFailure(true));
       throw error;
     });
 
-
-export const getRepository = (values) => {
-  const repository = values && values.name ? values.name : '';
-  const endpoint = repository ? `/api/repositories/?name=${repository}` : '/api/repositories/';
+export const getRepository = (dispatch) => {
+  const endpoint = '/api/repositories/';
   return axios
     .get(endpoint)
     .then((response) => {
       store.dispatch(getRepositorySuccess({...response.data}));
-      store.dispatch(reset('repoCreate'));
     }).catch((error) => {
-      console.error(error);
+      store.dispatch(renderRepositoryMessage(`Error: [${error.message}]`));
       throw error;
     });
 };
