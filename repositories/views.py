@@ -20,7 +20,12 @@ def commit_create_view(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def commit_list_view(request):
-    commits = Commit.objects.all()
+    name = request.GET.get("name")
+    if name:
+        commits = Repository.objects.filter(name__icontains=name)
+    else:
+        commits = Commit.objects.all()
+
     serializer = CommitSerializer(commits, many=True)
     return Response(serializer.data)
 
@@ -38,7 +43,6 @@ def repository_create_view(request):
 @permission_classes([IsAuthenticated])
 def repository_list_view(request):
     name = request.GET.get("name")
-
     if name:
         repositories = Repository.objects.filter(name__icontains=name)
     else:
