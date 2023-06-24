@@ -3,6 +3,17 @@ from rest_framework import serializers
 from .models import Commit, Repository
 
 
+class RepositoryRelatedField(serializers.RelatedField):
+    def to_representation(self, value):
+        return value.name
+
+    def to_internal_value(self, data):
+        try:
+            return Repository.objects.get(name=data)
+        except Repository.DoesNotExist:
+            raise serializers.ValidationError("Invalid repository")
+
+
 class RepositorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Repository
@@ -10,7 +21,7 @@ class RepositorySerializer(serializers.ModelSerializer):
 
 
 class CommitSerializer(serializers.ModelSerializer):
-    repository_name = serializers.CharField(write_only=True)
+    repository = RepositoryRelatedField(queryset=Repository.objects.all())
 
     class Meta:
         model = Commit
@@ -21,12 +32,11 @@ class CommitSerializer(serializers.ModelSerializer):
             'url',
             'avatar',
             'date',
-            'repository_name',
+            'repository',
         )
 
     def create(self, validated_data):
-        repository_name = validated_data.pop('repository_name')
-        repository = Repository.objects.get(name=repository_name)
+        repository = validated_data.pop('repository')
         validated_data['repository'] = repository
         commit = Commit.objects.create(**validated_data)
         return commit
