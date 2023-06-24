@@ -30,11 +30,13 @@ export const createRepository = (values, headers, formDispatch) =>
   axios
     .post('/api/repositories/create/', values, {headers})
     .then((response) => {
-      store.dispatch(renderRepositoryMessage(`Repository '${values.name}' added successfully!`));
+      const successMessage = `Repository '${values.name}' added successfully!`
+      store.dispatch(renderRepositoryMessage(`${successMessage}`));
       store.dispatch(createRepositorySuccess(true));
       formDispatch(reset('repoCreate'));
+      getRepository();
     }).catch((error) => {
-      store.dispatch(renderRepositoryMessage(`Error: [${error.message}]`));
+      store.dispatch(renderRepositoryMessage(`${error.message}`));
       store.dispatch(createRepositoryFailure(true));
       throw error;
     });
@@ -46,7 +48,7 @@ export const getRepository = (dispatch) => {
     .then((response) => {
       store.dispatch(getRepositorySuccess({...response.data}));
     }).catch((error) => {
-      store.dispatch(renderRepositoryMessage(`Error: [${error.message}]`));
+      store.dispatch(renderRepositoryMessage(`${error.message}`));
       throw error;
     });
 };

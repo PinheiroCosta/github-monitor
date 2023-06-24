@@ -27,12 +27,34 @@ class RepoCreateContainer extends React.Component {
     if (repositoryAdded) {
       dispatch(renderRepositoryMessage(`Repository '${name}' already added`));
       dispatch(createRepositoryFailure(true));
+      dispatch(reset('repoCreate'));
       return;
     } 
-    return createRepository(v, {'X-CSRFToken': token}, dispatch)
-      .then(getRepository(dispatch))
+
+    return getGithubCommits(user, name, dispatch)
+      .then((response) => {
+        if (response.status === 404) {
+          const errorMessage = `Repository '${name}' not found in GitHub.`
+          dispatch(renderRepositoryMessage(`${errorMessage}`));
+          dispatch(createRepositoryFailure(true));
+          dispatch(reset('repoCreate'));
+          return;
+        }
+
+        if (response.status === 200) {
+          return createRepository(v, {'X-CSRFToken': token}, dispatch);
+        } else {
+          const errorMessage = `Failed to communicate with Github.`
+          dispatch(renderRepositoryMessage(`${errorMessage}`));
+          dispatch(createRepositoryFailure(true));
+          return;
+        }
+      })
       .catch(error => {
-        console.error(error);
+        dispatch(renderRepositoryMessage(`${error}`));
+        dispatch(createRepositoryFailure(true));
+        dispatch(reset('repoCreate'));
+        return;
       });
   };
 
