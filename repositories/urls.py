@@ -1,29 +1,29 @@
 from django.urls import path
 
 from .views import (
-    commit_create_view,
-    commit_list_view,
-    repository_create_view,
-    repository_list_view
+    CommitCreate,
+    CommitList,
+    RepositoryCreate,
+    RepositoryList
 )
 
 app_name = 'repositories'
 
 urlpatterns = [
-    path('api/commits/',
-         commit_list_view,
-         name='commits-list'
-         ),
     path('api/commits/create/',
-         commit_create_view,
+         CommitCreate.as_view(),
          name='commits-create'
          ),
+    path('api/commits/',
+         CommitList.as_view(),
+         name='commits-list'
+         ),
     path('api/repositories/create/',
-         repository_create_view,
+         RepositoryCreate.as_view(),
          name='repositories-create'
          ),
     path('api/repositories/',
-         repository_list_view,
+         RepositoryList.as_view(),
          name='repositories-list'
          ),
 ]

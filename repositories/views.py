@@ -1,52 +1,58 @@
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-
 from .models import Commit, Repository
 from .serializers import CommitSerializer, RepositorySerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
+from rest_framework.response import Response
 
 
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def commit_create_view(request):
-    commits = request.data
-    serializer = CommitSerializer(data=commits, many=True)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+class CommitCreate(generics.CreateAPIView):
+    """
+    Create a new Commit
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommitSerializer
+
+    def post(self, request, format=None):
+        serializer = CommitSerializer(data=request.data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def commit_list_view(request):
-    name = request.GET.get("name")
-    if name:
-        commits = Repository.objects.filter(name__icontains=name)
-    else:
-        commits = Commit.objects.all()
+class CommitList(generics.ListAPIView):
+    """
+    List all Commits
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommitSerializer
 
-    serializer = CommitSerializer(commits, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def repository_create_view(request):
-    serializer = RepositorySerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def get_queryset(self):
+        name = self.request.GET.get("name")
+        if name:
+            return Repository.objects.filter(name__icontains=name)
+        else:
+            return Commit.objects.all()
 
 
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def repository_list_view(request):
-    name = request.GET.get("name")
-    if name:
-        repositories = Repository.objects.filter(name__icontains=name)
-    else:
-        repositories = Repository.objects.all()
+class RepositoryCreate(generics.CreateAPIView):
+    """
+    Create a new Repository
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = RepositorySerializer
 
-    serializer = RepositorySerializer(repositories, many=True)
-    return Response(serializer.data)
+
+class RepositoryList(generics.ListAPIView):
+    """
+    List all Repositories
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = RepositorySerializer
+
+    def get_queryset(self):
+        name = self.request.GET.get("name")
+        if name:
+            return Repository.objects.filter(name__icontains=name)
+        else:
+            return Repository.objects.all()

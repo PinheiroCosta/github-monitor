@@ -10,9 +10,9 @@ export const createRepositoryFailure = (errorMessage) => ({
   payload: {errorMessage},
 });
 
-export const getRepositorySuccess = repositories => ({
+export const getRepositorySuccess = response => ({
   type: types.GET_REPOSITORY_SUCCESS,
-  payload: repositories,
+  payload: response.results,
 });
 
 export const renderRepositoryMessage = renderMessage => ({
