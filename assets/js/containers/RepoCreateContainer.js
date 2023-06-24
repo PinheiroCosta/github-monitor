@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import Form from '../components/RepoCreateForm';
 import {connect} from 'react-redux';
 import {reset, stopSubmit} from 'redux-form';
-import {getGithubCommits} from '../api/GithubAPI';
+import {getGithubCommits, mapCommitsData} from '../api/GithubAPI';
 import {
   createRepository, 
   getRepository,
+  createCommits,
+  getCommits,
 } from '../api/CommitAPI';
 import {
   getRepositorySuccess, 
@@ -17,11 +19,10 @@ import {
 
 class RepoCreateContainer extends React.Component {
   submit = (values, dispatch) => {
-    const {repositories} = this.props;
+    const {repositories, commits} = this.props;
     const token = document.getElementById('main').dataset.csrftoken;
     const [user, name] = values.name.split('/');
     const v = {...values, name, user};
-    console.log(v);
 
     const repositoryAdded = repositories.map(object => object.name).includes(name);
     if (repositoryAdded) {
@@ -42,13 +43,24 @@ class RepoCreateContainer extends React.Component {
         }
 
         if (response.status === 200) {
-          return createRepository(v, {'X-CSRFToken': token}, dispatch);
+          return createRepository(v, {'X-CSRFToken': token}, dispatch)
+            .then(() => {
+              const {data} = response;
+              const commits = mapCommitsData(name, data); 
+              return createCommits(commits, {'X-CSRFToken': token}, dispatch);
+            })
+            .catch((error) => {
+              const errorMessage = `Error creating commits: ${error.message}`;
+              dispatch(renderRepositoryMessage(errorMessage));
+              dispatch(createRepositoryFailure(true));
+            });
         } else {
           const errorMessage = `Failed to communicate with Github.`
           dispatch(renderRepositoryMessage(`${errorMessage}`));
           dispatch(createRepositoryFailure(true));
           return;
         }
+
       })
       .catch(error => {
         dispatch(renderRepositoryMessage(`${error}`));
