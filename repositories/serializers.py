@@ -10,7 +10,7 @@ class RepositorySerializer(serializers.ModelSerializer):
 
 
 class CommitSerializer(serializers.ModelSerializer):
-    repository = serializers.StringRelatedField(many=False)
+    repository_name = serializers.CharField(write_only=True)
 
     class Meta:
         model = Commit
@@ -21,5 +21,12 @@ class CommitSerializer(serializers.ModelSerializer):
             'url',
             'avatar',
             'date',
-            'repository',
+            'repository_name',
         )
+
+    def create(self, validated_data):
+        repository_name = validated_data.pop('repository_name')
+        repository = Repository.objects.get(name=repository_name)
+        validated_data['repository'] = repository
+        commit = Commit.objects.create(**validated_data)
+        return commit
