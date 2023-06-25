@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { getCommits } from '../../api/CommitAPI';
 
 const CommitList = (props) => {
   const {commits} = props;
@@ -23,13 +25,21 @@ const CommitList = (props) => {
                       {commit.message}
                     </p>
                     <small className="text-muted">
-                      {commit.author}
+                      <Link 
+                        to={"/"}
+                        onClick={() => getCommits(null, commit.author)}
+                      >{commit.author}
+                      </Link>
                       {' '}
                       authored
                       {' '}
                       on
                       {' '}
-                      {commit.repository}
+                      <Link 
+                        to={"/"}
+                        onClick={() => getCommits(commit.repository)}
+                      >{commit.repository}
+                      </Link>
                       {' '}
                       at
                       {' '}

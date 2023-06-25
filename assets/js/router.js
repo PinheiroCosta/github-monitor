@@ -15,9 +15,7 @@ export default (
                 <div className="container-fluid">
                     <RepoCreateContainer />
                     <Switch>
-                        <Route path="/" exact> 
-                            <CommitListContainer />
-                        </Route>
+                        <Route path="/" exact> <CommitListContainer /> </Route>
                     </Switch>
                 </div>
             </div>

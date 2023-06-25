@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { getCommits } from '../../api/CommitAPI';
+
 
 const RepoList = (props) => {
   const {repositories} = props;
@@ -11,11 +13,19 @@ const RepoList = (props) => {
     <div id="sidebar-wrapper">
       <ul className="sidebar-nav">
         <li className="sidebar-brand">
-          <Link to="/">Github Monitor</Link>
+          <Link 
+          to="/"
+          onClick={() => getCommits()}>
+            Github Monitor
+          </Link>
         </li>
         {repositories.map((repository) => (
           <li key={repository.id} className="text-center">
-            <Link to={`/repositories/${repository.id}`}>{repository.name}</Link>
+            <Link 
+            to={"/"}
+            onClick={() => getCommits(repository.name)}>
+            {repository.name}
+            </Link>
           </li>
         ))}
       </ul>
