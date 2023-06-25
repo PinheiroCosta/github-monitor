@@ -4,6 +4,24 @@ from .pagination import CommitPagination, RepositoryPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework.response import Response
+from django_filters import FilterSet, CharFilter
+from django_filters.rest_framework import DjangoFilterBackend
+
+
+class CommitFilter(FilterSet):
+    repository = CharFilter(
+        field_name='repository__name',
+        lookup_expr='icontains'
+    )
+
+    author = CharFilter(
+        field_name='author__username',
+        lookup_expr='icontains'
+    )
+
+    class Meta:
+        model = Commit
+        fields = ['repository', 'author']
 
 
 class CommitCreate(generics.CreateAPIView):
@@ -28,6 +46,9 @@ class CommitList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CommitSerializer
     pagination_class = CommitPagination
+    filterset_class = CommitFilter
+    filter_backends = [DjangoFilterBackend]
+    queryset = Commit.objects.all()
 
     def get_queryset(self):
         name = self.request.GET.get("name")
