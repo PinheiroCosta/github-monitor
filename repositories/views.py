@@ -1,38 +1,32 @@
-from .models import Commit, Repository
-from .serializers import CommitSerializer, RepositorySerializer
-from .pagination import CommitPagination, RepositoryPagination
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
 from rest_framework.response import Response
-from django_filters import FilterSet, CharFilter
+from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import FilterSet, CharFilter
+from .models import Commit, Repository
 from decouple import config
-
-
-class CommitFilter(FilterSet):
-    repository = CharFilter(
-        field_name='repository__name',
-        lookup_expr='icontains'
-    )
-
-    author = CharFilter(
-        field_name='author__username',
-        lookup_expr='icontains'
-    )
-
-    class Meta:
-        model = Commit
-        fields = ['repository', 'author']
+from .serializers import CommitSerializer, RepositorySerializer
+from .pagination import CommitPagination, RepositoryPagination
 
 
 class GithubToken(generics.GenericAPIView):
     def get(self, request, *args, **kwars):
         github_token = config('GITHUB_ACCESS_TOKEN')
 
-        return Response(
-            {'github_token': github_token},
-            status=status.HTTP_200_OK
-        )
+        return Response({'github_token': github_token},
+                        status=status.HTTP_200_OK)
+
+
+class CommitFilter(FilterSet):
+    repository = CharFilter(field_name='repository__name',
+                            lookup_expr='icontains')
+
+    author = CharFilter(field_name='author',
+                        lookup_expr='icontains')
+
+    class Meta:
+        model = Commit
+        fields = ['repository', 'author']
 
 
 class CommitCreate(generics.CreateAPIView):
