@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {reset, stopSubmit} from 'redux-form';
+import {reset} from 'redux-form';
 import store from '../store';
 import {
   getCommitsSuccess, 
@@ -13,14 +13,12 @@ import {
 
 export const getCommits = (repository, author) => {
   const params = {};
-  
   if (repository) {
     params.repository = repository;
   }
   if (author) {
     params.author = author;
   }
-
   return axios.get(`/api/commits/`, {params}).then((response) => {
     store.dispatch(getCommitsSuccess({...response.data}));
   }).catch((error) => {
@@ -32,6 +30,7 @@ export const createCommits = (values, headers, formDispatch) =>
   axios
     .post('/api/commits/create/', values, {headers})
     .then((response) => {
+      //TODO dispatch commitCreateSuccess?
     }).catch((error) => {
       console.error(error);
     });

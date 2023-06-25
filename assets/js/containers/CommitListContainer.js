@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getCommits, createCommits} from '../api/CommitAPI';
+import {getCommits} from '../api/CommitAPI';
 import CommitList from '../components/CommitList';
 
 class CommitListContainer extends React.Component {

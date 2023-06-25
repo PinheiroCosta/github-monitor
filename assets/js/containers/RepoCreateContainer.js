@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Form from '../components/RepoCreateForm';
 import {connect} from 'react-redux';
-import {reset, stopSubmit} from 'redux-form';
+import {reset} from 'redux-form';
 import {getGithubCommits, mapCommitsData} from '../api/GithubAPI';
 import {
   createRepository, 
@@ -11,9 +11,7 @@ import {
   getCommits,
 } from '../api/CommitAPI';
 import {
-  getRepositorySuccess, 
   createRepositoryFailure, 
-  createRepositorySuccess,
   renderRepositoryMessage,
 } from '../actions/RepositoryActions';
 
