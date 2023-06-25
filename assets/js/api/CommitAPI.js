@@ -11,12 +11,22 @@ import {
   renderRepositoryMessage,
 } from '../actions/RepositoryActions';
 
-export const getCommits = () => 
-  axios
-    .get(`/api/commits/`)
-    .then((response) => {
-      store.dispatch(getCommitsSuccess({...response.data}));
-    });
+export const getCommits = (repository, author) => {
+  const params = {};
+  
+  if (repository) {
+    params.repository = repository;
+  }
+  if (author) {
+    params.author = author;
+  }
+
+  return axios.get(`/api/commits/`, {params}).then((response) => {
+    store.dispatch(getCommitsSuccess({...response.data}));
+  }).catch((error) => {
+    console.log(error);
+  });
+};
 
 export const createCommits = (values, headers, formDispatch) => 
   axios
