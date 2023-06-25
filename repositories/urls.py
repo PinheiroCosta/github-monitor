@@ -1,10 +1,10 @@
 from django.urls import path
-
 from .views import (
     CommitCreate,
     CommitList,
     RepositoryCreate,
-    RepositoryList
+    RepositoryList,
+    GithubToken,
 )
 
 app_name = 'repositories'
@@ -25,5 +25,9 @@ urlpatterns = [
     path('api/repositories/',
          RepositoryList.as_view(),
          name='repositories-list'
+         ),
+    path('github-token/',
+         GithubToken.as_view(),
+         name='github_token'
          ),
 ]

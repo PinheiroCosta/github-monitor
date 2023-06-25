@@ -2,10 +2,11 @@ from .models import Commit, Repository
 from .serializers import CommitSerializer, RepositorySerializer
 from .pagination import CommitPagination, RepositoryPagination
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from django_filters import FilterSet, CharFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from decouple import config
 
 
 class CommitFilter(FilterSet):
@@ -22,6 +23,16 @@ class CommitFilter(FilterSet):
     class Meta:
         model = Commit
         fields = ['repository', 'author']
+
+
+class GithubToken(generics.GenericAPIView):
+    def get(self, request, *args, **kwars):
+        github_token = config('GITHUB_ACCESS_TOKEN')
+
+        return Response(
+            {'github_token': github_token},
+            status=status.HTTP_200_OK
+        )
 
 
 class CommitCreate(generics.CreateAPIView):
