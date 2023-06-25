@@ -1,5 +1,6 @@
 from .models import Commit, Repository
 from .serializers import CommitSerializer, RepositorySerializer
+from .pagination import CommitPagination, RepositoryPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework.response import Response
@@ -26,6 +27,7 @@ class CommitList(generics.ListAPIView):
     """
     permission_classes = [IsAuthenticated]
     serializer_class = CommitSerializer
+    pagination_class = CommitPagination
 
     def get_queryset(self):
         name = self.request.GET.get("name")
@@ -49,6 +51,7 @@ class RepositoryList(generics.ListAPIView):
     """
     permission_classes = [IsAuthenticated]
     serializer_class = RepositorySerializer
+    pagination_class = RepositoryPagination
 
     def get_queryset(self):
         name = self.request.GET.get("name")
