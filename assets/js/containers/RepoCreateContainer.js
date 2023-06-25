@@ -49,6 +49,9 @@ class RepoCreateContainer extends React.Component {
               const commits = mapCommitsData(name, data); 
               return createCommits(commits, {'X-CSRFToken': token}, dispatch);
             })
+            .then(() => {
+              getCommits();
+            })
             .catch((error) => {
               const errorMessage = `Error creating commits: ${error.message}`;
               dispatch(renderRepositoryMessage(errorMessage));
