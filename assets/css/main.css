@@ -104,6 +104,11 @@ body {
   background: none;
 }
 
+.commit-list {
+  max-height: 55vh; 
+  overflow-y: auto;
+}
+
 @media(min-width:768px) {
   #wrapper {
     padding-left: 0;

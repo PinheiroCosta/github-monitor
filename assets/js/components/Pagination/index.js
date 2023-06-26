@@ -6,9 +6,9 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   return (
     <div>
-      <ul className="pagination justify-content-center">
-        <li class="page-item disabled">
-          <span class="page-link">Previous</span>
+      <ul className="pagination fixed-bottom justify-content-center">
+        <li className="page-item disabled">
+          <span className="page-link">Previous</span>
         </li>
         {pageNumbers.map((pageNumber) => (
           <li
@@ -23,8 +23,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             </button>
           </li>
         ))}
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
+        <li className="page-item">
+          <a className="page-link" href="#">Next</a>
         </li>
       </ul>
     </div>

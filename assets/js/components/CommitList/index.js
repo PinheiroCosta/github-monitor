@@ -14,7 +14,7 @@ const CommitList = (props) => {
               Commit List
             </div>
 
-            <div className="card-body">
+            <div className="card-body commit-list">
               {commits.map((commit, index) => (
                 <div key={commit.sha}>
                   <div className="avatar">
