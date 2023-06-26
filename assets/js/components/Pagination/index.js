@@ -6,7 +6,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   return (
     <div>
-      <ul className="pagination fixed-bottom justify-content-center">
+      <ul className="pagination justify-content-center">
         <li className="page-item disabled">
           <span className="page-link">Previous</span>
         </li>

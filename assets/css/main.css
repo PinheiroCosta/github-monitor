@@ -109,6 +109,10 @@ body {
   overflow-y: auto;
 }
 
+.pagination {
+  margin-top: 40px;
+}
+
 @media(min-width:768px) {
   #wrapper {
     padding-left: 0;
