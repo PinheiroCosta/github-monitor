@@ -19,6 +19,11 @@ class RepositorySerializer(serializers.ModelSerializer):
         model = Repository
         fields = ('name', 'id')
 
+    def validate_name(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Repository name can't be empty")
+        return value
+
 
 class CommitSerializer(serializers.ModelSerializer):
     repository = RepositoryRelatedField(queryset=Repository.objects.all())
